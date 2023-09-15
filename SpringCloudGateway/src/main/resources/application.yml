@@ -1,0 +1,41 @@
+server:
+  port: 8090
+  
+spring:
+  application:
+    name: cloudgateway
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay=
+      routes:
+        - id: route1
+          uri: http://localhost:8091/
+          predicates:
+            - Path=/resource1/**
+          filters:
+            - SetPath=/resourceserver01/  
+        - id: route2
+          uri: http://localhost:8092/
+          predicates:
+            - Path=/resource2/**
+          filters:
+            - SetPath=/resourceserver02/
+        - id: angular
+          uri: http://localhost:4200/
+          predicates:
+            - Path=/**
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway:
+            provider: spring
+            client-id: client
+            client-secret: secret
+            scope: openid, profile
+            authorization-grant-type: authorization_code
+            redirect-uri: http://127.0.0.1:8090/login/oauth2/code/gateway
+        provider:
+          spring:
+            issuer-uri: http://localhost:9000
