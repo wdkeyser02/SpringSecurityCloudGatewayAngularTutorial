@@ -1,0 +1,11 @@
+server:
+  port: 8091
+
+spring:
+  application:
+    name: resourceserver01
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000    
