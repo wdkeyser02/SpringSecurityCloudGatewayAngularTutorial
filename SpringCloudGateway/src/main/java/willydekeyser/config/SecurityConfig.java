@@ -15,7 +15,9 @@ public class SecurityConfig {
                 .authorizeExchange(exchange -> exchange
                 		.pathMatchers("/**").permitAll()
                 		.anyExchange().authenticated())
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .oauth2Login(withDefaults())
+                .oauth2Client(withDefaults())
                 .build();
     }
 }
