@@ -49,8 +49,8 @@
 							<p th:text="${scope.description}"></p>
 						</div>
 
-						<p th:if="${not #lists.isEmpty(previouslyApprovedScopes)}">You have already granted the
-							following permissions to the above app:</p>
+						<p th:if="${not #lists.isEmpty(previouslyApprovedScopes)}">
+							You have already granted the following permissions to the above app:</p>
 						<div th:each="scope: ${previouslyApprovedScopes}">
 							<input class="form-check-input" type="checkbox" th:id="${scope.scope}" disabled checked>
 							<label th:for="${scope.scope}" th:text="${scope.scope}"></label>
