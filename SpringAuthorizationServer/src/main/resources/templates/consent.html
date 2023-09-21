@@ -1,29 +1,88 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-	<head>
-		<title>Please Log In</title>
-		<link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	<body>
-		<div class="login-page">
-		  	<div class="form">
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<title>Spring Boot Tutorial</title>
+	<script>
+		function cancelConsent() {
+			document.consent_form.reset();
+			document.consent_form.submit();
+		}
+	</script>
+</head>
+
+<body>
+	<div class="consent-page">
+		<div class="consent">
+			<div>
 				<h1>Spring Boot Tutorial</h1>
-				<h2>Please Log In</h2>
-				<div class="error" th:if="${param.error}">
-					Invalid username and password.</div>
-				<div class="error" th:if="${param.logout}">
-					You have been logged out.</div>
-				<form  class="login-form" th:action="@{/login}" method="post">
-					<div>
-					<input type="text" name="username" placeholder="Username"/>
-					</div>
-					<div>
-					<input type="password" name="password" placeholder="Password"/>
-					</div>
-					<input class="button" type="submit" value="Log in" />
-				</form>
-				<p>Willy De Keyser</p>
+			</div>
+			<div>
+				<div>
+					<p>
+						The application
+						<span class="consent_span" th:text="${clientId}"></span>
+						wants to access your account
+						<span class="consent_span" th:text="${principalName}"></span>
+					</p>
+				</div>
+			</div>
+			<div>
+				<div>
+					<p>The following permissions are requested by the above app.<br />Please review
+						these and consent if you approve.</p>
+				</div>
+			</div>
+			<div>
+				<div>
+					<form name="consent_form" method="post" th:action="@{/oauth2/authorize}">
+						<input type="hidden" name="client_id" th:value="${clientId}">
+						<input type="hidden" name="state" th:value="${state}">
+
+						<div th:each="scope: ${scopes}">
+							<input class="form-check-input" type="checkbox" name="scope" th:value="${scope.scope}"
+								th:id="${scope.scope}">
+							<label th:for="${scope.scope}" th:text="${scope.scope}"></label>
+							<p th:text="${scope.description}"></p>
+						</div>
+
+						<p th:if="${not #lists.isEmpty(previouslyApprovedScopes)}">You have already granted the
+							following permissions to the above app:</p>
+						<div th:each="scope: ${previouslyApprovedScopes}">
+							<input class="form-check-input" type="checkbox" th:id="${scope.scope}" disabled checked>
+							<label th:for="${scope.scope}" th:text="${scope.scope}"></label>
+							<p th:text="${scope.description}"></p>
+						</div>
+
+						<div>
+							<button class="button" type="submit" id="submit-consent">
+								Submit Consent
+							</button>
+						</div>
+						<div class="form-group">
+							<button class="button" type="button" id="cancel-consent" onclick="cancelConsent();">
+								Cancel
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div>
+				<div>
+					<p>
+						<small>
+							Your consent to provide access is required.
+							<br />If you do not approve, click Cancel, in which case no information will be shared with
+							the app.
+						</small>
+					</p>
+				</div>
 			</div>
 		</div>
-	</body>
+	</div>
+</body>
+
 </html>
