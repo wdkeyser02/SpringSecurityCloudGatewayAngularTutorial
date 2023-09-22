@@ -18,7 +18,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -36,7 +37,6 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -93,11 +93,16 @@ public class SecurityConfig {
     }
 	
 	@Bean
-	InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-		var user1 = User.withUsername("user").password("{noop}password").roles("USER").build();
-		var user2 = User.withUsername("admin").password("{noop}password").roles("USER", "ADMIN").build();
-		return new InMemoryUserDetailsManager(user1, user2);
-	}
+    PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+	
+	//@Bean
+	//InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+	//	var user1 = User.withUsername("user").password("{noop}password").roles("USER").build();
+	//	var user2 = User.withUsername("admin").password("{noop}password").roles("USER", "ADMIN").build();
+	//	return new InMemoryUserDetailsManager(user1, user2);
+	//}
 
 	@Bean 
 	RegisteredClientRepository registeredClientRepository() {
