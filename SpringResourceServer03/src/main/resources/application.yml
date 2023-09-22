@@ -1,0 +1,16 @@
+server:
+  port: 8093
+
+spring:
+  application:
+    name: resourceserver03
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000    
+  datasource:
+    url: jdbc:mariadb://192.168.1.30:3306/springboottutorial
+    username: willy
+    password: mO6/DHN[ry
+    driver-class-name: org.mariadb.jdbc.Driver
