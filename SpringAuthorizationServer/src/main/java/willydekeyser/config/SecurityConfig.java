@@ -77,11 +77,10 @@ public class SecurityConfig {
 			throws Exception {
 		http
 			.authorizeHttpRequests((authorize) -> authorize
-				.requestMatchers("/error").permitAll()
+				.requestMatchers("/error", "/login").permitAll()
 				.anyRequest().authenticated())
 			.formLogin(formLogin -> formLogin
 					.loginPage("/login")
-					.permitAll()
 			);
 		return http.build();
 	}
