@@ -21,6 +21,12 @@ spring:
             - Path=/resource2/**
           filters:
             - SetPath=/resourceserver02/
+        - id: route3
+          uri: http://localhost:8093/
+          predicates:
+            - Path=/resource3/{segment}
+          filters:
+            - SetPath=/resourceserver03/{segment}
         - id: angular
           uri: http://localhost:4200/
           predicates:
