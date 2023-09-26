@@ -20,21 +20,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
-import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -97,33 +90,33 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 	
-	//@Bean
-	//InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-	//	var user1 = User.withUsername("user").password("{noop}password").roles("USER").build();
-	//	var user2 = User.withUsername("admin").password("{noop}password").roles("USER", "ADMIN").build();
-	//	return new InMemoryUserDetailsManager(user1, user2);
-	//}
+//	@Bean
+//	InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+//		var user1 = User.withUsername("user").password("{noop}password").roles("USER").build();
+//		var user2 = User.withUsername("admin").password("{noop}password").roles("USER", "ADMIN").build();
+//		return new InMemoryUserDetailsManager(user1, user2);
+//	}
 
-	@Bean 
-	RegisteredClientRepository registeredClientRepository() {
-		RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-				.clientId("client")
-				.clientSecret("{noop}secret")
-				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-				.redirectUri("http://127.0.0.1:8090/login/oauth2/code/gateway")
-				.postLogoutRedirectUri("http://127.0.0.1:8090/logged-out")
-				.scope(OidcScopes.OPENID)
-				.scope(OidcScopes.PROFILE)
-				.clientSettings(ClientSettings.builder()
-						.requireAuthorizationConsent(true)
-						.requireProofKey(false)
-						.build())
-				.build();
-
-		return new InMemoryRegisteredClientRepository(oidcClient);
-	}
+//	@Bean 
+//	RegisteredClientRepository registeredClientRepository() {
+//		RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//				.clientId("client")
+//				.clientSecret("{noop}secret")
+//				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//				.redirectUri("http://127.0.0.1:8090/login/oauth2/code/gateway")
+//				.postLogoutRedirectUri("http://127.0.0.1:8090/logged-out")
+//				.scope(OidcScopes.OPENID)
+//				.scope(OidcScopes.PROFILE)
+//				.clientSettings(ClientSettings.builder()
+//						.requireAuthorizationConsent(true)
+//						.requireProofKey(false)
+//						.build())
+//				.build();
+//
+//		return new InMemoryRegisteredClientRepository(oidcClient);
+//	}
 	
 	@Bean
 	OAuth2AuthorizationConsentService authorizationConsentService() {

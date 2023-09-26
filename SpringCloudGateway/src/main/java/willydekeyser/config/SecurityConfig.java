@@ -1,6 +1,7 @@
 package willydekeyser.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -12,10 +13,10 @@ import org.springframework.security.web.server.authentication.logout.ServerLogou
 @Configuration
 public class SecurityConfig {
 
-	private final ReactiveClientRegistrationRepository repository;
+	private final ReactiveClientRegistrationRepository reactiveClientRegistrationRepository;
 	
-	public SecurityConfig(ReactiveClientRegistrationRepository repository) {
-		this.repository = repository;
+	public SecurityConfig(ReactiveClientRegistrationRepository reactiveClientRegistrationRepository) {
+		this.reactiveClientRegistrationRepository = reactiveClientRegistrationRepository;
 	}
 
 	@Bean
@@ -24,17 +25,17 @@ public class SecurityConfig {
                 .authorizeExchange(exchange -> exchange
                 		.pathMatchers("/**").permitAll()
                 		.anyExchange().authenticated())
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .csrf(withDefaults())
                 .oauth2Login(withDefaults())
                 .oauth2Client(withDefaults())
                 .logout(logout -> logout
                 		.logoutUrl("/logout")
-                		.logoutSuccessHandler(logoutSuccessHandler(repository)))
+                		.logoutSuccessHandler(serverLogoutSuccessHandler(reactiveClientRegistrationRepository)))
                 .build();
     }
 	
 	@Bean
-	ServerLogoutSuccessHandler logoutSuccessHandler(ReactiveClientRegistrationRepository repository) {
+	ServerLogoutSuccessHandler serverLogoutSuccessHandler(ReactiveClientRegistrationRepository repository) {
 	       OidcClientInitiatedServerLogoutSuccessHandler oidcLogoutSuccessHandler = new OidcClientInitiatedServerLogoutSuccessHandler(repository);
 	       oidcLogoutSuccessHandler.setPostLogoutRedirectUri("{baseUrl}/logged-out");
 	       return oidcLogoutSuccessHandler;
