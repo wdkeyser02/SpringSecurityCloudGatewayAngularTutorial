@@ -23,7 +23,7 @@ public class SecurityConfig {
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 		return http
                 .authorizeExchange(exchange -> exchange
-                		.pathMatchers("/**").permitAll()
+                		.pathMatchers("/", "/me", "/logout").permitAll()
                 		.anyExchange().authenticated())
                 .csrf(withDefaults())
                 .oauth2Login(withDefaults())

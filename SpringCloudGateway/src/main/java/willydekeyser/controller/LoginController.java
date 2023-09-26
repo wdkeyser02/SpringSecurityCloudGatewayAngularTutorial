@@ -7,7 +7,7 @@ import org.springframework.web.reactive.result.view.RedirectView;
 @Controller
 public class LoginController {
 
-	@GetMapping("logged-out")
+	@GetMapping("/logged-out")
 	public RedirectView logout() {
 		RedirectView redirectView = new RedirectView();
 	    redirectView.setUrl("/");
