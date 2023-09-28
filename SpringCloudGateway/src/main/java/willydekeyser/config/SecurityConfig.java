@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestCustomizers;
+import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 
@@ -20,12 +23,13 @@ public class SecurityConfig {
 	}
 
 	@Bean
-    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ServerOAuth2AuthorizationRequestResolver resolver) {
 		return http
                 .authorizeExchange(exchange -> exchange
                 		.pathMatchers("/**").permitAll()
                 		.anyExchange().authenticated())
-                .oauth2Login(withDefaults())
+                .oauth2Login(auth -> auth
+                		.authorizationRequestResolver(resolver))
                 .oauth2Client(withDefaults())
                 .logout(logout -> logout
                 		.logoutUrl("/logout")
@@ -38,5 +42,12 @@ public class SecurityConfig {
 	       OidcClientInitiatedServerLogoutSuccessHandler oidcLogoutSuccessHandler = new OidcClientInitiatedServerLogoutSuccessHandler(repository);
 	       oidcLogoutSuccessHandler.setPostLogoutRedirectUri("{baseUrl}/logged-out");
 	       return oidcLogoutSuccessHandler;
-	   }
+	}
+	
+	@Bean
+	ServerOAuth2AuthorizationRequestResolver pkceResolver(ReactiveClientRegistrationRepository repo) {
+	    var resolver = new DefaultServerOAuth2AuthorizationRequestResolver(repo);
+	    resolver.setAuthorizationRequestCustomizer(OAuth2AuthorizationRequestCustomizers.withPkce());
+	    return resolver;
+	}
 }
