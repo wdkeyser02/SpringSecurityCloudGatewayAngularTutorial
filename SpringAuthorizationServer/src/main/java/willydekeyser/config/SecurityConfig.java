@@ -22,8 +22,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationConsentService;
-import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
@@ -118,10 +116,10 @@ public class SecurityConfig {
 //		return new InMemoryRegisteredClientRepository(oidcClient);
 //	}
 	
-	@Bean
-	OAuth2AuthorizationConsentService authorizationConsentService() {
-		return new InMemoryOAuth2AuthorizationConsentService();
-	}
+//	@Bean
+//	OAuth2AuthorizationConsentService authorizationConsentService() {
+//		return new InMemoryOAuth2AuthorizationConsentService();
+//	}
 	
 	@Bean 
 	JWKSource<SecurityContext> jwkSource() {
