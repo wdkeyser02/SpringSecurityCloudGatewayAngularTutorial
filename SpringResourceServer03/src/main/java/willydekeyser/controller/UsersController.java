@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import willydekeyser.entity.Users;
+import willydekeyser.entity.User;
 import willydekeyser.service.UsersService;
 
 @RestController
@@ -22,7 +22,7 @@ public class UsersController {
 	
 	@GetMapping("/users")
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-	public List<Users> findAllUsers() {
+	public List<User> findAllUsers() {
 		return usersService.findAllUsers();
 	}
 	
