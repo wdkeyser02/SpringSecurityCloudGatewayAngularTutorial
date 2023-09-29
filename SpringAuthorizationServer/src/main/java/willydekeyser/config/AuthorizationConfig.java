@@ -18,7 +18,9 @@ public class AuthorizationConfig {
 	}
 	
 	@Bean
-	JdbcOAuth2AuthorizationConsentService jdbcOAuth2AuthorizationConsentService(JdbcOperations jdbcOperations, RegisteredClientRepository registeredClientRepository) {
+	JdbcOAuth2AuthorizationConsentService jdbcOAuth2AuthorizationConsentService(
+			JdbcOperations jdbcOperations, 
+			RegisteredClientRepository registeredClientRepository) {
 		return new JdbcOAuth2AuthorizationConsentService(jdbcOperations, registeredClientRepository);
 	}
 }
