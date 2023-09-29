@@ -7,23 +7,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import willydekeyser.entity.User;
-import willydekeyser.service.UsersService;
+import willydekeyser.entity.Session;
+import willydekeyser.service.SessionService;
 
 @RestController
 @RequestMapping("/resourceserver03")
-public class UsersController {
+public class SessionController {
 
-	private final UsersService usersService;
+	private final SessionService sessionService;
 
-	public UsersController(UsersService usersService) {
-		this.usersService = usersService;
+	public SessionController(SessionService sessionService) {
+		this.sessionService = sessionService;
 	}
 	
-	@GetMapping("/users")
+	@GetMapping("/sessions")
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-	public List<User> findAllUsers() {
-		return usersService.findAllUsers();
+	public List<Session> findAllSession() {
+		return sessionService.findAllSession();
 	}
-	
 }
