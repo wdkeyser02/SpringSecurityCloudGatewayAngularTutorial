@@ -23,13 +23,13 @@ public class SecurityConfig {
 	}
 
 	@Bean
-    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ServerOAuth2AuthorizationRequestResolver resolver) {
+    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ServerOAuth2AuthorizationRequestResolver pkceResolver) {
 		return http
                 .authorizeExchange(exchange -> exchange
                 		.pathMatchers("/**").permitAll()
                 		.anyExchange().authenticated())
                 .oauth2Login(auth -> auth
-                		.authorizationRequestResolver(resolver))
+                		.authorizationRequestResolver(pkceResolver))
                 .oauth2Client(withDefaults())
                 .logout(logout -> logout
                 		.logoutUrl("/logout")
