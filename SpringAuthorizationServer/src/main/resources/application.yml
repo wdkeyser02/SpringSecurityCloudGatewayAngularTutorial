@@ -12,4 +12,11 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
   sql:
     init:
-      mode: always  
+      mode: always
+      
+jwt:
+  key:
+    public: classpath:key.pub
+    private: classpath:key.key
+    id: spring_boot_tutorial
+    
