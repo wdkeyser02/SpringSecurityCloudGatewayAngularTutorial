@@ -2,25 +2,16 @@ package willydekeyser.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
-import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
-import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -75,22 +66,23 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 	
-	@Bean
-	OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
-		return context -> {
-			Authentication principal = context.getPrincipal();
-			if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
-				Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-						.collect(Collectors.toSet());
-				context.getClaims().claim("authorities", authorities);
-			}
-			
-			if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
-				Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-						.collect(Collectors.toSet());
-				context.getClaims().claim("authorities", authorities);
-				context.getClaims().claim("details", "Spring Boot Tutorial");
-			}
-		};
-	}
+//	@Bean
+//	OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
+//		return context -> {
+//			Authentication principal = context.getPrincipal();
+//			System.err.println("OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() " + context.getTokenType());
+//			if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
+//				Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+//						.collect(Collectors.toSet());
+//				context.getClaims().claim("authorities", authorities);
+//			}
+//			
+//			if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
+//				Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+//						.collect(Collectors.toSet());
+//				context.getClaims().claim("authorities", authorities);
+//				context.getClaims().claim("details", "Spring Boot Tutorial");
+//			}
+//		};
+//	}
 }

@@ -18,5 +18,5 @@ jwt:
   key:
     public: classpath:key.pub
     private: classpath:key.key
-    id: spring_boot_tutorial
+    id: spring-boot-tutorial-a3afe780-4dfb-4160-8d8f-b6469b78f073
     

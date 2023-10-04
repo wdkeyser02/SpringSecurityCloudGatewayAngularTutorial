@@ -17,8 +17,11 @@ public class UserInfo {
 	public Mono<UserDto> userInfo(@AuthenticationPrincipal OidcUser principal) {
 		if (principal instanceof OidcUser) {
 			List<String> list = principal.getIdToken().getClaimAsStringList("authorities");
-			String authorities = list.stream()
-					.collect(Collectors.joining(","));
+			String authorities = ""; 
+			if (list != null) {
+				authorities = list.stream()
+						.collect(Collectors.joining(","));
+			}
 			return Mono.just(
 					new UserDto(
 							principal.getIdToken().getSubject(),
