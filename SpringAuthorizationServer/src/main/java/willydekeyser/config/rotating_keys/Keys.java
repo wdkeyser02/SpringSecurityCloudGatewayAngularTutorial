@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component;
 public class Keys {
 
 	RsaKeyPairRepository.RsaKeyPair generateKeyPair(Instant created) {
-        var keyPair = generateRsaKey();
-        var publicKey = (RSAPublicKey) keyPair.getPublic();
-        var privateKey = (RSAPrivateKey) keyPair.getPrivate();
+        KeyPair keyPair = generateRsaKey();
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
         return new RsaKeyPairRepository.RsaKeyPair(UUID.randomUUID().toString(), created, publicKey, privateKey);
     }
 
     private KeyPair generateRsaKey() {
         try {
-            var keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        	KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(2048);
             return keyPairGenerator.generateKeyPair();
         }//

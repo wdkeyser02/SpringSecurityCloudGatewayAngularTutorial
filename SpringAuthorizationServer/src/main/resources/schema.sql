@@ -123,3 +123,13 @@ CREATE TABLE if not exists oauth2_authorization_consent (
     authorities varchar(1000) NOT NULL,
     PRIMARY KEY (registered_client_id, principal_name)
 );
+
+-- rsa_key_pairs
+create table if not exists rsa_key_pairs
+(
+    id          varchar(1000) not null primary key,
+    private_key text          not null,
+    public_key  text          not null,
+    created     date          not null,
+    constraint id_created UNIQUE (id, created)
+);

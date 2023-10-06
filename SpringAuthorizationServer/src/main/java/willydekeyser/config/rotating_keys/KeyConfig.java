@@ -27,7 +27,7 @@ public class KeyConfig {
 	@Bean
     OAuth2TokenGenerator<OAuth2Token> delegatingOAuth2TokenGenerator(JwtEncoder encoder,
     		OAuth2TokenCustomizer<JwtEncodingContext> customizer) {		
-		var generator = new JwtGenerator(encoder);
+		JwtGenerator generator = new JwtGenerator(encoder);
         generator.setJwtCustomizer(customizer);
         return new DelegatingOAuth2TokenGenerator(generator,
                 new OAuth2AccessTokenGenerator(), new OAuth2RefreshTokenGenerator());
