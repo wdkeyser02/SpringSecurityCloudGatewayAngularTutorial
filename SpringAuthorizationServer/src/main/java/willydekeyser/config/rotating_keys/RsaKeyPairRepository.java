@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface RsaKeyPairRepository {
 
+	record RsaKeyPair(String id, Instant created, RSAPublicKey publicKey, RSAPrivateKey privateKey) {}
+	
 	List<RsaKeyPair> findKeyPairs();
 
 	void delete(String id);
 
 	void save(RsaKeyPair rsaKeyPair);
-	
-	record RsaKeyPair(String id, Instant created, RSAPublicKey publicKey, RSAPrivateKey privateKey) {}
 }
