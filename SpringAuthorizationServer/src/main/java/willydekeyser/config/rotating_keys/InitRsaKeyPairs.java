@@ -1,36 +1,28 @@
 package willydekeyser.config.rotating_keys;
 
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.time.Duration;
 import java.time.Instant;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+
+import willydekeyser.config.rotating_keys.RsaKeyPairRepository.RsaKeyPair;
 
 @Component
 public class InitRsaKeyPairs implements ApplicationRunner {
 
 	private final RsaKeyPairRepository repository;
-	private final String id;
-	private final RSAPublicKey publicKey;
-	private final RSAPrivateKey privateKey;
+	private final Keys keys;
 
-	public InitRsaKeyPairs(RsaKeyPairRepository repository,
-			@Value("${jwt.key.id}") String id,
-			@Value("${jwt.key.public}") RSAPublicKey publicKey,
-			@Value("${jwt.key.private}") RSAPrivateKey privateKey) {
+	public InitRsaKeyPairs(RsaKeyPairRepository repository, Keys keys) {
 		this.repository = repository;
-		this.id = id;
-		this.publicKey = publicKey;
-		this.privateKey = privateKey;
+		this.keys = keys;
 	}
 	
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		this.repository.save(new RsaKeyPairRepository.RsaKeyPair(this.id, Instant.now().minus(Duration.ofDays(1)), publicKey, privateKey));
+		RsaKeyPair keypair = keys.generateKeyPair(Instant.now());
+		this.repository.save(keypair);
 	}
 	
 }

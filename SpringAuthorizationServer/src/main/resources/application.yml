@@ -13,10 +13,3 @@ spring:
   sql:
     init:
       mode: always
-      
-jwt:
-  key:
-    public: classpath:key.pub
-    private: classpath:key.key
-    id: spring-boot-tutorial-a3afe780-4dfb-4160-8d8f-b6469b78f073
-    
