@@ -18,7 +18,6 @@ public class InMemoryRsaKeyPairRepository implements RsaKeyPairRepository {
 	public List<RsaKeyPair> findKeyPairs() {
 		List<RsaKeyPair> result = new ArrayList<>(this.idToKeyPair.values());
 		Collections.sort(result, Comparator.comparing(RsaKeyPair::created).reversed());
-		//System.err.println(result);
 		return result;
 	}
 
@@ -29,7 +28,6 @@ public class InMemoryRsaKeyPairRepository implements RsaKeyPairRepository {
 
 	@Override
 	public void save(RsaKeyPair rsaKeyPair) {
-		//System.err.println(rsaKeyPair);
 		this.idToKeyPair.put(rsaKeyPair.id(), rsaKeyPair);
 	}
 

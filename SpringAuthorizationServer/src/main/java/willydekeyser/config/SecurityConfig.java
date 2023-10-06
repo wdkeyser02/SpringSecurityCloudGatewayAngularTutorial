@@ -66,23 +66,4 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 	
-//	@Bean
-//	OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
-//		return context -> {
-//			Authentication principal = context.getPrincipal();
-//			System.err.println("OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() " + context.getTokenType());
-//			if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
-//				Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-//						.collect(Collectors.toSet());
-//				context.getClaims().claim("authorities", authorities);
-//			}
-//			
-//			if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
-//				Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-//						.collect(Collectors.toSet());
-//				context.getClaims().claim("authorities", authorities);
-//				context.getClaims().claim("details", "Spring Boot Tutorial");
-//			}
-//		};
-//	}
 }
