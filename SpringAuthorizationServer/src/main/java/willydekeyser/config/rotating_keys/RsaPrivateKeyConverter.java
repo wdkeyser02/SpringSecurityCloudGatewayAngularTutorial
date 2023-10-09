@@ -35,8 +35,8 @@ class RsaPrivateKeyConverter implements Serializer<RSAPrivateKey>, Deserializer<
     }
 
     @Override
-    public void serialize(RSAPrivateKey object, OutputStream outputStream) throws IOException {
-    	PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(object.getEncoded());
+    public void serialize(RSAPrivateKey key, OutputStream outputStream) throws IOException {
+    	PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(key.getEncoded());
         String string = "-----BEGIN PRIVATE KEY-----\n" + Base64.getMimeEncoder().encodeToString(pkcs8EncodedKeySpec.getEncoded())
                      + "\n-----END PRIVATE KEY-----";
         outputStream.write(string.getBytes());
