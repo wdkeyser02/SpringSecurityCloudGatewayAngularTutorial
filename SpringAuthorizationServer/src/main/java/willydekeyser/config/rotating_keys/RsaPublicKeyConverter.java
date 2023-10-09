@@ -37,7 +37,7 @@ class RsaPublicKeyConverter implements Serializer<RSAPublicKey>, Deserializer<RS
             return (RSAPublicKey) keyFactory.generatePublic(keySpec);
         }
         catch (Throwable throwable) {
-            throw new IllegalArgumentException("there's been an exception", throwable);
+            throw new IllegalArgumentException("There's been an exception", throwable);
         }
 
     }

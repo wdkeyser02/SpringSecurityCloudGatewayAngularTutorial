@@ -24,9 +24,9 @@ public class KeyConfig {
 
 	@Bean
     TextEncryptor textEncryptor(
-            @Value("${jwt.persistence.password}") String pw,
-            @Value("${jwt.persistence.salt}") String salt) {
-        return Encryptors.text(pw, salt);
+            @Value("${jwt.encryptor.password}") String password,
+            @Value("${jwt.encryptor.salt}") String salt) {
+        return Encryptors.text(password, salt);
     }
 	
 	@Bean

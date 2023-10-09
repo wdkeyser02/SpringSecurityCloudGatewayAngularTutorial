@@ -37,7 +37,7 @@ class RsaPrivateKeyConverter implements Serializer<RSAPrivateKey>, Deserializer<
             return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
         }
         catch (Throwable throwable) {
-            throw new IllegalArgumentException("there's been an exception", throwable);
+            throw new IllegalArgumentException("There's been an exception", throwable);
         }
     }
 

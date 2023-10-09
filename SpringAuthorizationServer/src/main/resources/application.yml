@@ -14,6 +14,6 @@ spring:
     init:
       mode: always
 jwt:
-  persistence:
+  encryptor:
     password: password
     salt: 626F6F746966756C
