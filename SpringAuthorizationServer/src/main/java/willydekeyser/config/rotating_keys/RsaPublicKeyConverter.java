@@ -36,8 +36,8 @@ class RsaPublicKeyConverter implements Serializer<RSAPublicKey>, Deserializer<RS
     }
 
     @Override
-    public void serialize(RSAPublicKey object, OutputStream outputStream) throws IOException {
-    	X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(object.getEncoded());
+    public void serialize(RSAPublicKey key, OutputStream outputStream) throws IOException {
+    	X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(key.getEncoded());
         String pem = "-----BEGIN PUBLIC KEY-----\n" +
                   Base64.getMimeEncoder().encodeToString(x509EncodedKeySpec.getEncoded()) +
                   "\n-----END PUBLIC KEY-----";
