@@ -21,8 +21,10 @@ public class InitRsaKeyPairs implements ApplicationRunner {
 	
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		RsaKeyPair keypair = keys.generateKeyPair(Instant.now());
-		this.repository.save(keypair);
+		if (this.repository.findKeyPairs().isEmpty()) {
+			RsaKeyPair keypair = keys.generateKeyPair(Instant.now());
+			this.repository.save(keypair);
+		}
 	}
 	
 }

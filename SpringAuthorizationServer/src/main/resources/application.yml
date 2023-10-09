@@ -13,3 +13,7 @@ spring:
   sql:
     init:
       mode: always
+jwt:
+  persistence:
+    password: password
+    salt: 626F6F746966756C

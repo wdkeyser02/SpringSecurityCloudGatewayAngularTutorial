@@ -1,7 +1,10 @@
 package willydekeyser.config.rotating_keys;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
@@ -19,6 +22,13 @@ import com.nimbusds.jose.proc.SecurityContext;
 @Configuration
 public class KeyConfig {
 
+	@Bean
+    TextEncryptor textEncryptor(
+            @Value("${jwt.persistence.password}") String pw,
+            @Value("${jwt.persistence.salt}") String salt) {
+        return Encryptors.text(pw, salt);
+    }
+	
 	@Bean
 	NimbusJwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
 		return new NimbusJwtEncoder(jwkSource);

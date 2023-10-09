@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "jwt.persistence.password",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.persistence.password'"
+  },
+  {
+    "name": "jwt.persistence.salt",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.persistence.salt'"
+  }
+]}

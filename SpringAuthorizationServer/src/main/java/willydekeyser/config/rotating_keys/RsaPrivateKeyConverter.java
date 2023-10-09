@@ -2,6 +2,7 @@ package willydekeyser.config.rotating_keys;
 
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
@@ -17,10 +18,16 @@ import java.util.Base64;
 @Component
 class RsaPrivateKeyConverter implements Serializer<RSAPrivateKey>, Deserializer<RSAPrivateKey> {
   
+	private final TextEncryptor textEncryptor;
+
+    RsaPrivateKeyConverter(TextEncryptor textEncryptor) {
+        this.textEncryptor = textEncryptor;
+    }
+    
     @Override
     public RSAPrivateKey deserialize(InputStream inputStream) {
         try {
-            String pem = FileCopyUtils.copyToString(new InputStreamReader(inputStream));
+            String pem = this.textEncryptor.decrypt(FileCopyUtils.copyToString(new InputStreamReader(inputStream)));
             String privateKeyPEM = pem
                     .replace("-----BEGIN PRIVATE KEY-----", "")
                     .replace("-----END PRIVATE KEY-----", "");
@@ -39,6 +46,6 @@ class RsaPrivateKeyConverter implements Serializer<RSAPrivateKey>, Deserializer<
     	PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(key.getEncoded());
         String string = "-----BEGIN PRIVATE KEY-----\n" + Base64.getMimeEncoder().encodeToString(pkcs8EncodedKeySpec.getEncoded())
                      + "\n-----END PRIVATE KEY-----";
-        outputStream.write(string.getBytes());
+        outputStream.write(this.textEncryptor.encrypt(string).getBytes());
     }
 }

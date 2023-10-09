@@ -2,6 +2,7 @@ package willydekeyser.config.rotating_keys;
 
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
@@ -17,10 +18,16 @@ import java.util.Base64;
 @Component
 class RsaPublicKeyConverter implements Serializer<RSAPublicKey>, Deserializer<RSAPublicKey> {
 
+	private final TextEncryptor textEncryptor;
+
+	RsaPublicKeyConverter(TextEncryptor textEncryptor) {
+        this.textEncryptor = textEncryptor;
+    }
+    
     @Override
     public RSAPublicKey deserialize(InputStream inputStream) throws IOException {
         try {
-            String pem = FileCopyUtils.copyToString(new InputStreamReader(inputStream));
+            String pem = this.textEncryptor.decrypt(FileCopyUtils.copyToString(new InputStreamReader(inputStream)));
             String publicKeyPEM = pem
                     .replace("-----BEGIN PUBLIC KEY-----", "")
                     .replace("-----END PUBLIC KEY-----", "");
@@ -38,9 +45,9 @@ class RsaPublicKeyConverter implements Serializer<RSAPublicKey>, Deserializer<RS
     @Override
     public void serialize(RSAPublicKey key, OutputStream outputStream) throws IOException {
     	X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(key.getEncoded());
-        String pem = "-----BEGIN PUBLIC KEY-----\n" +
+        String string = "-----BEGIN PUBLIC KEY-----\n" +
                   Base64.getMimeEncoder().encodeToString(x509EncodedKeySpec.getEncoded()) +
                   "\n-----END PUBLIC KEY-----";
-        outputStream.write(pem.getBytes());
+        outputStream.write(this.textEncryptor.encrypt(string).getBytes());
     }
 }
