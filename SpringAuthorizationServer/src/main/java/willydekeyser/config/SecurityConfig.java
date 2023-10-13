@@ -13,8 +13,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+
+import willydekeyser.security.MFAHandler;
 
 @Configuration
 public class SecurityConfig {
@@ -47,9 +52,12 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests((authorize) -> authorize
 				.requestMatchers("/error", "/login").permitAll()
+				.requestMatchers("/authenticator").hasAuthority("ROLE_2FA_REQUIRED")
 				.anyRequest().authenticated())
 			.formLogin(formLogin -> formLogin
 					.loginPage("/login")
+					.successHandler(new MFAHandler("/authenticator", "ROLE_2FA_REQUIRED"))
+                    .failureHandler(new SimpleUrlAuthenticationFailureHandler("/login?error"))
 			);
 		return http.build();
 	}
@@ -60,6 +68,11 @@ public class SecurityConfig {
                 .ignoring()
                 .requestMatchers("/webjars/**", "/images/**", "/css/**", "/assets/**", "/favicon.ico");
     }
+	
+	@Bean
+	AuthenticationSuccessHandler authenticationSuccessHandler() {
+		return new SavedRequestAwareAuthenticationSuccessHandler();
+	}
 	
 	@Bean
     PasswordEncoder passwordEncoder() {
