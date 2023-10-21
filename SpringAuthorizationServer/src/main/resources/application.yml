@@ -18,4 +18,9 @@ jwt:
     password: password
     salt: 626F6F746966756C
   secret:
-    key: yVMO9QNJ5i2IBZLZCuJPGg==    
+    key: yVMO9QNJ5i2IBZLZCuJPGg==
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
