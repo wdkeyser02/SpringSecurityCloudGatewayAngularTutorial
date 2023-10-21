@@ -1,5 +1,10 @@
 {"properties": [
   {
+    "name": "jwt.secret.key",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.secret.key'"
+  },
+  {
     "name": "jwt.encryptor.password",
     "type": "java.lang.String",
     "description": "A description for 'jwt.encryptor.password'"
