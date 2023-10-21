@@ -1,12 +1,12 @@
 {"properties": [
   {
-    "name": "jwt.encryptor.password",
-    "type": "java.lang.String",
-    "description": "A description for 'jwt.encryptor.password'"
-  },
-  {
     "name": "jwt.encryptor.salt",
     "type": "java.lang.String",
     "description": "A description for 'jwt.encryptor.salt'"
+  },
+  {
+    "name": "jwt.encryptor.password",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.encryptor.password'"
   }
 ]}
