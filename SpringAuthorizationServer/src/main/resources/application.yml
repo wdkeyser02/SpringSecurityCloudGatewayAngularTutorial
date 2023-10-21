@@ -17,3 +17,8 @@ jwt:
   encryptor:
     password: password
     salt: 626F6F746966756C
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
