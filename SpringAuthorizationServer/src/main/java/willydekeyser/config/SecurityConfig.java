@@ -16,7 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+
+import willydekeyser.security.MFAHandler;
 
 @Configuration
 public class SecurityConfig {
@@ -49,10 +52,13 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests((authorize) -> authorize
 				.requestMatchers("/error", "/login").permitAll()
-				.requestMatchers("/authenticator").hasAuthority("ROLE_2FA_REQUIRED")
+				.requestMatchers("/registration", "/authenticator").hasAuthority("ROLE_MFA_REQUIRED")
+				.requestMatchers("/security-question").hasAuthority("ROLE_SECURITY_QUESTION_REQUIRED")
 				.anyRequest().authenticated())
 			.formLogin(formLogin -> formLogin
 					.loginPage("/login")
+					.successHandler(new MFAHandler("/authenticator", "ROLE_MFA_REQUIRED"))
+                    .failureHandler(new SimpleUrlAuthenticationFailureHandler("/login?error"))
 			);
 		return http.build();
 	}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Registration</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div class="registration-page">
+		<div class="form">
+			<h1>Multi-Factor Registration</h1>
+			<div><img th:src="${qrImage}" /></div>
+			<div th:if="${param.error}">Invalid code. Please try again.</div>
+			<form method="post" th:action="@{/registration}">
+				<label for="code">Registration: </label>
+				<input id="code" type="text" name="code" placeholder="Code" required autofocus><br><br>
+				<button id="submit-button" type="submit">Submit</button>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>

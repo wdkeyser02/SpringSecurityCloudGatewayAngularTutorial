@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Security Question</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div class="security-question-page">
+		<div class="form">
+			<h1>Security Question</h1>
+			<div th:if="${param.error}">Invalid answer. Please try again.</div>
+			<form method="post" th:action="@{/security-question}">
+				<label for="answer" th:text="${question}"></label>
+				<input id="answer" type="text" name="answer" placeholder="Answer" required autofocus><br><br>
+				<button id="submit-button" type="submit">Submit</button>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>
