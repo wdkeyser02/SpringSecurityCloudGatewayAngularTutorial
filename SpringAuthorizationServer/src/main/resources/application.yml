@@ -17,3 +17,5 @@ jwt:
   encryptor:
     password: password
     salt: 626F6F746966756C
+  secret:
+    key: yVMO9QNJ5i2IBZLZCuJPGg==    
