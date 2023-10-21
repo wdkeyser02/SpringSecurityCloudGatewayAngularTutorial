@@ -17,11 +17,9 @@ import org.springframework.security.crypto.encrypt.BytesEncryptor;
 public class CustomUserDetailsService implements UserDetailsService {
 
 	private final JdbcTemplate jdbcTemplate;
-	private final BytesEncryptor bytesEncryptor;
 	
-	public CustomUserDetailsService(JdbcTemplate jdbcTemplate, BytesEncryptor bytesEncryptor) {
+	public CustomUserDetailsService(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
-		this.bytesEncryptor = bytesEncryptor;
 	}
 
 	@Override
@@ -81,11 +79,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 
 	public void saveUserInfoMfaRegistered(String secret, String username) {
-		String encryptedSecret = new String(Hex.encode(this.bytesEncryptor.encrypt(secret.getBytes(StandardCharsets.UTF_8))));
 		String sql = """
 				UPDATE usersinfo SET mfaSecret = ?, mfaRegistered = true WHERE username = ?;
 				""";
-		this.jdbcTemplate.update(sql, encryptedSecret, username);
+		this.jdbcTemplate.update(sql, secret, username);
 	}
 	
 }
