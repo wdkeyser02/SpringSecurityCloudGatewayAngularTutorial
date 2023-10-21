@@ -49,7 +49,6 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests((authorize) -> authorize
 				.requestMatchers("/error", "/login").permitAll()
-				.requestMatchers("/authenticator").hasAuthority("ROLE_2FA_REQUIRED")
 				.anyRequest().authenticated())
 			.formLogin(formLogin -> formLogin
 					.loginPage("/login")
