@@ -27,6 +27,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import willydekeyser.security.MFAAuthentication;
 import willydekeyser.security.MFAHandler;
 import willydekeyser.service.AuthenticatorService;
+import willydekeyser.service.CodeStore;
 import willydekeyser.user.CustomUserDetailsService;
 import willydekeyser.user.User;
 
@@ -47,6 +48,7 @@ public class LoginController {
 	private final CustomUserDetailsService customUserDetailsService;
 	private final PasswordEncoder passwordEncoder;
 	private String generatedCode = "";
+	private final CodeStore codeStore;
 	private String base32Secret = "";
 	private String keyId = "";
 	
@@ -54,11 +56,13 @@ public class LoginController {
 			AuthenticationSuccessHandler authenticationSuccessHandler, 
 			AuthenticatorService authenticatorService,
 			CustomUserDetailsService customUserDetailsService,
-			PasswordEncoder passwordEncoder) {
+			PasswordEncoder passwordEncoder,
+			CodeStore codeStrore) {
 		this.authenticationSuccessHandler = authenticationSuccessHandler;
 		this.authenticatorService = authenticatorService;
 		this.customUserDetailsService = customUserDetailsService;
 		this.passwordEncoder = passwordEncoder;
+		this.codeStore = codeStrore;
 	}
 	
 	@GetMapping("/login")
@@ -77,6 +81,7 @@ public class LoginController {
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
 		}
+		codeStore.saveGeneratedCode(generatedCode);
 		System.err.println(generatedCode);
 		model.addAttribute("qrImage", authenticatorService.generateQrImageUrl(keyId, base32Secret));
 		return "registration";
@@ -87,7 +92,7 @@ public class LoginController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@CurrentSecurityContext SecurityContext context) throws ServletException, IOException {
-		if (code.equals(generatedCode)) {
+		if (code.equals(codeStore.getGeneratedCode())) {
 			customUserDetailsService.saveUserInfoMfaRegistered(base32Secret, getUser(context).username());
 			if (!getUser(context).securityQuestionEnabled()) {
 				this.authenticationSuccessHandler.onAuthenticationSuccess(request, response, getAuthentication(request, response));
