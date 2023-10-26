@@ -12,7 +12,7 @@
 		<div class="form">
 			<h1>Multi-Factor Registration</h1>
 			<div><img th:src="${qrImage}" /></div>
-			<div th:if="${param.error}">Invalid code. Please try again.</div>
+			<div class="error" th:if="${param.error}">Invalid code. Please try again.</div>
 			<form method="post" th:action="@{/registration}">
 				<label for="code">Registration: </label>
 				<input id="code" type="text" name="code" placeholder="Code" required autofocus><br><br>

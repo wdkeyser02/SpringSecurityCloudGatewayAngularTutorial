@@ -11,7 +11,7 @@
 	<div class="security-question-page">
 		<div class="form">
 			<h1>Security Question</h1>
-			<div th:if="${param.error}">Invalid answer. Please try again.</div>
+			<div class="error" th:if="${param.error}">Invalid answer. Please try again.</div>
 			<form method="post" th:action="@{/security-question}">
 				<label for="answer" th:text="${question}"></label>
 				<input id="answer" type="text" name="answer" placeholder="Answer" required autofocus><br><br>
