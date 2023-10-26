@@ -49,10 +49,9 @@ public class LoginController {
 	private final AuthenticatorService authenticatorService;
 	private final CustomUserDetailsService customUserDetailsService;
 	private final PasswordEncoder passwordEncoder;
-	private String generatedCode = "";
 	private final CodeStore codeStore;
+	private String generatedCode = "";
 	private String base32Secret = "";
-	private String keyId = "";
 	
 	public LoginController(
 			AuthenticationSuccessHandler authenticationSuccessHandler, 
@@ -77,15 +76,14 @@ public class LoginController {
 			Model model, 
 			@CurrentSecurityContext SecurityContext context) {
 		base32Secret = authenticatorService.generateSecret();
-		keyId = getUser(context).mfaKeyId();
 		try {
 			generatedCode = authenticatorService.getCode(base32Secret);
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
 		}
 		codeStore.saveAll(generatedCode, base32Secret);
-		System.err.println(generatedCode);
-		model.addAttribute("qrImage", authenticatorService.generateQrImageUrl(keyId, base32Secret));
+		//System.err.println(generatedCode);
+		model.addAttribute("qrImage", authenticatorService.generateQrImageUrl(getUser(context).mfaKeyId(), base32Secret));
 		return "registration";
 	}
 	
