@@ -16,11 +16,27 @@ public class CodeStore implements Serializable {
 	@JsonIgnoreProperties
 	private String generatedCode;
 	
+	@JsonIgnoreProperties
+	private String base32Secret;
+	
+	public void saveAll(String generatedCode, String base32Secret) {
+		this.generatedCode = generatedCode;
+		this.base32Secret = base32Secret;
+	}
+	
 	public String getGeneratedCode() {
 		return generatedCode;
 	}
 	
 	public void saveGeneratedCode(String generatedCode) {
 		this.generatedCode = generatedCode;
+	}
+	
+	public String getBase32Secret() {
+		return base32Secret;
+	}
+	
+	public void saveBase32Secret(String base32Secret) {
+		this.base32Secret = base32Secret;
 	}
 }

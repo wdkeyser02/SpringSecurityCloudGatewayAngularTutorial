@@ -36,6 +36,8 @@ public class LoginController {
 
 	private final SecurityContextRepository securityContextRepository = 
 			new HttpSessionSecurityContextRepository();
+	private final AuthenticationFailureHandler registrationFailureHandler =
+			new SimpleUrlAuthenticationFailureHandler("/registration?error");
 	private final AuthenticationFailureHandler authenticatorFailureHandler =
 			new SimpleUrlAuthenticationFailureHandler("/authenticator?error");
 	private final AuthenticationFailureHandler securityQuestionFailureHandler =
@@ -81,7 +83,7 @@ public class LoginController {
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
 		}
-		codeStore.saveGeneratedCode(generatedCode);
+		codeStore.saveAll(generatedCode, base32Secret);
 		System.err.println(generatedCode);
 		model.addAttribute("qrImage", authenticatorService.generateQrImageUrl(keyId, base32Secret));
 		return "registration";
@@ -93,7 +95,7 @@ public class LoginController {
 			HttpServletResponse response,
 			@CurrentSecurityContext SecurityContext context) throws ServletException, IOException {
 		if (code.equals(codeStore.getGeneratedCode())) {
-			customUserDetailsService.saveUserInfoMfaRegistered(base32Secret, getUser(context).username());
+			customUserDetailsService.saveUserInfoMfaRegistered(codeStore.getBase32Secret(), getUser(context).username());
 			if (!getUser(context).securityQuestionEnabled()) {
 				this.authenticationSuccessHandler.onAuthenticationSuccess(request, response, getAuthentication(request, response));
 				return;
@@ -101,7 +103,8 @@ public class LoginController {
 			this.securityQuestionSuccessHandler.onAuthenticationSuccess(request, response, getAuthentication(request, response));
 			return;
 		}
-		this.authenticatorFailureHandler.onAuthenticationFailure(request, response, new BadCredentialsException("bad credentials"));
+		customUserDetailsService.deleteUserInfoMfaRegistered(getUser(context).username());
+		this.registrationFailureHandler.onAuthenticationFailure(request, response, new BadCredentialsException("bad credentials"));
 	}
 	
 	@GetMapping("/authenticator")

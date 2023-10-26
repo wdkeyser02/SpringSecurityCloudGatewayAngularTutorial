@@ -88,4 +88,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 		this.jdbcTemplate.update(sql, encryptedSecret, username);
 	}
 	
+	public void deleteUserInfoMfaRegistered(String username) {
+		String sql = """
+				UPDATE usersinfo SET mfaSecret = '', mfaRegistered = false WHERE username = ?;
+				""";
+		this.jdbcTemplate.update(sql, username);
+	}
 }
